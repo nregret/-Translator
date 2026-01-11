@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "python-in-tauri",
+  "version": "0.1.0",
+  "identifier": "com.yunlong.python-in-tauri",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "python-in-tauri",
+        "width": 1220,
+        "height": 840,
+        "resizable": true,
+        "maximizable": true,
+        "center": true 
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": [
+      "../resources/python/**/*",
+      "../resources/backend/**/*",
+      "../resources/config.json"
+    ],
+    "createUpdaterArtifacts": false
+  }
+}

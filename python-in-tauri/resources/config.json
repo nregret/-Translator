@@ -1,0 +1,16 @@
+{
+  "model_path": "C:\\Users\\YunLong\\Downloads\\HY-MT1.5-1.8B-Q4_K_M.gguf",
+  "context_length": 2048,
+  "threads": 32,
+  "max_tokens": 512,
+  "temperature": 0.1,
+  "api_base_url": "http://127.0.0.1:8000",
+  "timeout": 5000,
+  "auto_copy": false,
+  "dark_mode": true,
+  "theme_color": "#0464a4",
+  "model_dir": "C:\\Users\\YunLong\\Downloads\\models",
+  "current_model": "HY-MT1.5-1.8B-Q4_K_M.gguf",
+  "baidu_appid": "20250601002371232",
+  "baidu_appkey": "OFDnEilblE0zb1lLvncI"
+}
