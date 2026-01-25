@@ -50,7 +50,18 @@
           <div class="avatar">AI</div>
           <div class="user-details">
             <span class="username">智能助手</span>
-            <span class="status">在线</span>
+            <span class="status" :class="backendStatusClass">{{ backendStatusText }}</span>
+          </div>
+        </div>
+
+        <!-- 后端状态指示器 -->
+        <div class="backend-status" v-if="backendStatus !== 'ready'">
+          <div class="status-indicator" :class="backendStatus">
+            <span class="status-dot"></span>
+            <span class="status-text">{{ backendStatusText }}</span>
+          </div>
+          <div v-if="backendError" class="error-details">
+            <button @click="showErrorDetails" class="error-btn">查看详情</button>
           </div>
         </div>
       </div>
@@ -81,7 +92,9 @@ export default {
   setup() {
     const currentTab = ref('api');
     const theme = ref('light');
-    
+    const backendStatus = ref('checking');
+    const backendError = ref(null);
+
     const tabs = [
       { id: 'api', label: '智能翻译', component: ApiTranslation, icon: '🤖' },
       { id: 'batch', label: '批量翻译', component: BatchFileTranslation, icon: '📁' },
@@ -91,6 +104,25 @@ export default {
     const currentComponent = computed(() => {
       const tab = tabs.find(t => t.id === currentTab.value);
       return tab ? tab.component : tabs[0].component;
+    });
+
+    // 后端状态相关的计算属性
+    const backendStatusClass = computed(() => {
+      switch (backendStatus.value) {
+        case 'ready': return 'status-online';
+        case 'checking': return 'status-checking';
+        case 'error': return 'status-error';
+        default: return 'status-offline';
+      }
+    });
+
+    const backendStatusText = computed(() => {
+      switch (backendStatus.value) {
+        case 'ready': return '后端就绪';
+        case 'checking': return '检查中...';
+        case 'error': return '后端错误';
+        default: return '后端离线';
+      }
     });
     
     const switchTab = (tabId) => {
@@ -105,18 +137,57 @@ export default {
       // 触发自定义事件，通知 Settings.vue 更新
       window.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme: newTheme } }));
     };
-    
-    // 加载保存的主题
+
+    const checkBackendStatus = async () => {
+      try {
+        backendStatus.value = 'checking';
+
+        let port = 8000;
+        try {
+          const response = await fetch('./port_config.json');
+          if (response.ok) {
+            const config = await response.json();
+            port = config.port || 8000;
+          }
+        } catch (e) {
+        }
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+        const response = await fetch(`http://127.0.0.1:${port}/health`, {
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.ok) {
+          backendStatus.value = 'ready';
+          backendError.value = null;
+        } else {
+          throw new Error(`HTTP ${response.status}`);
+        }
+      } catch (error) {
+        backendStatus.value = 'error';
+        backendError.value = error.message;
+      }
+    };
+
+    const showErrorDetails = () => {
+      alert(`后端连接失败\n\n错误: ${backendError.value}\n\n请检查Python后端是否正常运行`);
+    };
+
     onMounted(() => {
       const savedTheme = localStorage.getItem('app-theme') || 'light';
       setTheme(savedTheme);
-      // 监听主题变化事件
+
+      checkBackendStatus();
+
       window.addEventListener('theme-changed', (e) => {
         if (e.detail && e.detail.theme) {
           theme.value = e.detail.theme;
         }
       });
-      // 监听 localStorage 变化（跨标签页同步）
       window.addEventListener('storage', (e) => {
         if (e.key === 'app-theme') {
           setTheme(e.newValue || 'light');
@@ -130,7 +201,12 @@ export default {
       currentComponent,
       switchTab,
       theme,
-      setTheme
+      setTheme,
+      backendStatus,
+      backendError,
+      backendStatusClass,
+      backendStatusText,
+      showErrorDetails
     };
   }
 };
@@ -580,6 +656,70 @@ export default {
   padding: 24px;
   border-radius: var(--radius-md);
   border: 2px solid var(--border-color);
+}
+
+/* ========== 后端状态指示器 ========== */
+.backend-status {
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-indicator.ready .status-dot {
+  background: #10b981;
+}
+
+.status-indicator.checking .status-dot {
+  background: #f59e0b;
+}
+
+.status-indicator.error .status-dot {
+  background: #ef4444;
+}
+
+.status-indicator.offline .status-dot {
+  background: #6b7280;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.error-details {
+  margin-top: 8px;
+}
+
+.error-btn {
+  padding: 6px 12px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.error-btn:hover {
+  background: #dc2626;
 }
 
 /* ========== 加载动画 ========== */
