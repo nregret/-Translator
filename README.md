@@ -1,4 +1,4 @@
-# SimpleTauri Translator | 轻量级智能翻译专家
+# 无道翻译词典
 
 ![SimpleTauri Logo](./python-in-tauri/src-tauri/icons/128x128.png)
 *(这里可以放置一张应用的 LOGO 图)*
@@ -19,9 +19,9 @@ SimpleTauri 是一款基于 **Tauri (Rust)** 和 **Vue 3** 构建的现代化桌
 
 ## 📸 应用截图
 
-![首页](./example/1.png)
+![首页](./examples/1.png)
 
-![设置](./example/2.png)
+![设置](./examples/2.png)
 
 ---
 
