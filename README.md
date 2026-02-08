@@ -1,6 +1,6 @@
 # SimpleTauri Translator | 轻量级智能翻译专家
 
-![SimpleTauri Logo](./python-in-tauri/src-tauri/icons/512.png)
+![SimpleTauri Logo](./python-in-tauri/src-tauri/icons/128x128.png)
 *(这里可以放置一张应用的 LOGO 图)*
 
 SimpleTauri 是一款基于 **Tauri (Rust)** 和 **Vue 3** 构建的现代化桌面翻译工具。它结合了前端的极致性能与后端 Python 的强大处理能力，支持文本 API 翻译、批量文件翻译，并集成本地 AI 模型，旨在提供私密、高效、流畅的翻译体验。
@@ -19,11 +19,9 @@ SimpleTauri 是一款基于 **Tauri (Rust)** 和 **Vue 3** 构建的现代化桌
 
 ## 📸 应用截图
 
-> **[占位符：应用首页/翻译界面]**
-> *说明：请在这里上传一张应用主界面的截图，展示左侧导航栏和右侧的主翻译窗口。*
+![首页](./example/1.png)
 
-> **[占位符：设置页面]**
-> *说明：展示 API 配置、本地模型路径选择等功能的截图。*
+![设置](./example/2.png)
 
 ---
 
