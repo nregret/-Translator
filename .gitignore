@@ -1,1 +1,41 @@
+# Node.js
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Rust (Tauri)
+**/target/
+**/src-tauri/target/
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/venv/
+**/resources/python/
+
+# Large Files & Binaries
+**/*.exe
+**/*.zip
+**/*.7z
+**/*.rar
+
+# OS & IDE
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db
+*.tmp
+*.temp
+.cache/
+
+# Custom ignores
 python-in-tauri/包含传说中去掉AVX512指令集的llamacpp轮子卧槽你的.zip
